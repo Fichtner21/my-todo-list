@@ -1,7 +1,7 @@
 <div class="container">
   <nav class="row">
     <div class="nav-wrapper">
-      <span class="brand-logo center">{{ title | uppercase}}</span>
+      <span class="brand-logo center">{{ config?.title | uppercase}}</span>
     </div>
   </nav>
 
@@ -15,14 +15,15 @@
       class="col s8"
       type="text"
       placeholder="Dodaj zadanie i datę wykonania"
+      (keyup)="onKeyUp($event)"
     />
     <input class="col s2 disabled" type="date" />
-    <button class="btn-floating">+</button>
+    <button class="btn-floating" (click)="createTask()">+</button>
   </div>
 
   <ul class="collection">
-    <li class="collection-item row">
-      <span class="col s10">1 Siłownia - 11.07 czwartek</span>
+    <li class="collection-item row" *ngFor="let task of tasks; let i = index">
+      <span class="col s10">{{ i + 1 }}. {{ task.name }} - {{ task.deadline | date: 'd.MM.EEEE' : '' : 'pl' }}</span>
       <div class="col s2 right-align">
         <button class="btn-floating btn-small red">
           <i class="material-icons">remove</i>
@@ -39,12 +40,18 @@
 
   <h1>Dzisiaj brak zadań :-)</h1>
 
-  <button class="btn red">Wyczyść</button>
+  <button class="btn red" (click)="clearTasks()">Wyczyść</button>
 
   <footer class="page-footer mt-5">
     <div class="footer-copyright">
       <div class="container">
-        {{ getDate() | date: 'yyyy'}} {{ getDate() | date: 'short' }} {{ footer }}
+        {{ config?.date | date: 'yyyy' }}{{ config?.footer }}
+        <!-- {{ getDate() | date: 'yyyy'}} {{ getDate() | date: 'short' }} {{ footer }} -->
+        <!-- <h1>{{ title | titlecase }}</h1> -->
+        <!-- <h3>{{someDate | date: 'fullDate': '' : 'pl'}}</h3> -->
+        <!-- <div>{{translate | json}}</div> -->
+        <!-- <div *ngIf="dog && dog.name">{{ dog.name }}</div> -->
+        <!-- <div *ngIf="dog && dog.liczba">{{ dog.liczba.trzecia }}</div> -->
       </div>
     </div>
   </footer>
