@@ -7,7 +7,9 @@ import { Task } from './task.ts';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  taskName: string;
+  editMode: false;
+  taskName = 'Sugerowane zdanie codzienne: odkurzanie';
+  taskDate = '';
   tasks: Task[] = [
     {
       name: 'Karmienie',
@@ -17,7 +19,7 @@ export class AppComponent {
     {
       name: 'Przewijanie',
       deadline: '2020-03-16',
-      done: false,
+      done: true,
     },
     {
       name: 'Sprzątanie',
@@ -55,7 +57,8 @@ export class AppComponent {
       //     trzecia: 3,
       //   },
       // };
-    }, 1000);     
+    }, 1000);  
+    this.sortTasks();   
   }
 
   clearTasks(){
@@ -63,19 +66,40 @@ export class AppComponent {
   }
 
   // zczytywanie tego co jest aktualnie pisane w inpucie
-  onKeyUp(event: KeyboardEvent){
-    const target = event.target as HTMLInputElement;
-    this.taskName = target.value;
-    //console.log(target.value);
-  }
+  // onKeyUp(event: KeyboardEvent){
+  //   const target = event.target as HTMLInputElement;
+  //   this.taskName = target.value;
+  //   //console.log(target.value);
+  // }
 
   createTask(){
     const task: Task = {
       name: this.taskName,
-      deadline: '2020-03-18',
+      deadline: this.taskDate,
       done: false,
     }; 
-    this.tasks.push(task);  
+    this.tasks.push(task);
+    this.taskName = '';
+    this.taskDate = '';  
+    this.sortTasks();
+  }
+
+  switchEditMode(){
+    this.editMode = !this.editMode;
+  }
+
+  markTaskAsDone(task: Task){
+    task.done = true;
+    this.sortTasks();
+  }
+
+  deleteTask(task: Task){
+    this.tasks = this.tasks.filter(e => e !== task);
+    this.sortTasks();
+  }
+
+  private sortTasks(){
+    this.tasks = this.tasks.sort((a: Task, b: Task) => a.done === b.done ? 0 : a.done ? 1 : -1);
   }
 
   // get footer(): string {
